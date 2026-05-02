@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  web:
+    image: nomepierdo:latest
+    env_file:
+      - /opt/deploy/nomepierdo/.env-prod
+    networks:
+      - matdevnet
+      - db_net
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=matdevnet"
+        # Routers públicos (reemplazar DOMINIO)
+        - "traefik.http.routers.nomepierdo.rule=Host(`REEMPLAZAR_DOMINIO.com`)"
+        - "traefik.http.routers.nomepierdo.entrypoints=websecure"
+        - "traefik.http.routers.nomepierdo.tls.certresolver=letsencryptresolver"
+        # Servicio
+        - "traefik.http.services.nomepierdo.loadbalancer.server.port=3000"
+
+  db:
+    image: postgres:15-alpine
+    env_file:
+      - /opt/deploy/nomepierdo/.env-prod
+    networks:
+      - db_net
+    volumes:
+      - nomepierdo_pgdata:/var/lib/postgresql/data
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+networks:
+  matdevnet:
+    external: true
+  db_net:
+    driver: overlay
+    attachable: true
+
+volumes:
+  nomepierdo_pgdata:
