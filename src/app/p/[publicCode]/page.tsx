@@ -60,12 +60,10 @@ export default async function PublicPetPage({ params }: { params: Promise<{ publ
           {/* Header Image */}
           <div className="h-64 bg-gray-200 relative">
             {pet.photoUrl ? (
-              <Image 
+              <img
                 src={pet.photoUrl} 
-                alt={`Foto de ${pet.name}`}
-                fill
-                className="object-cover"
-                priority
+                alt={pet.name}
+                className="w-full h-full object-cover"
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center bg-blue-50">

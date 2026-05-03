@@ -41,7 +41,7 @@ export default function EditPetForm({ pet }: { pet: any }) {
             <label className="block text-sm font-medium text-gray-700 text-center">Foto de la Mascota</label>
             <div className="h-32 w-32 relative rounded-full overflow-hidden bg-gray-100 border border-gray-200 flex items-center justify-center">
               {previewUrl ? (
-                <Image src={previewUrl} alt="Preview" fill className="object-cover" />
+                <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
               ) : (
                 <span className="text-gray-400">Sin foto</span>
               )}

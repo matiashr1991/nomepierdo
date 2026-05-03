@@ -57,11 +57,10 @@ export default async function PetsPage() {
             <div key={pet.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
               <div className="h-48 bg-gray-100 relative">
                 {pet.photoUrl ? (
-                  <Image 
+                  <img
                     src={pet.photoUrl} 
-                    alt={pet.name} 
-                    fill 
-                    className="object-cover"
+                    alt={pet.name}
+                    className="w-full h-full object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-400">
