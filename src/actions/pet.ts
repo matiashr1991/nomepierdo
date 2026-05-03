@@ -45,7 +45,7 @@ export async function createPet(formData: FormData) {
     await mkdir(path.dirname(filepath), { recursive: true });
     await writeFile(filepath, buffer);
     
-    photoUrl = `/uploads/${filename}`;
+    photoUrl = `/api/uploads/${filename}`;
   }
 
   // Generate unique public code
@@ -106,7 +106,7 @@ export async function updatePet(id: string, formData: FormData) {
     await mkdir(path.dirname(filepath), { recursive: true });
     await writeFile(filepath, buffer);
     
-    photoUrl = `/uploads/${filename}`;
+    photoUrl = `/api/uploads/${filename}`;
   }
 
   await prisma.pet.update({
