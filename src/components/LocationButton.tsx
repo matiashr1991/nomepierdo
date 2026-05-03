@@ -32,16 +32,12 @@ export function LocationButton({ publicCode, whatsappPhone, petName, isLost }: L
         const { latitude, longitude } = position.coords;
         const locationText = `\n\n📍 Mi ubicación exacta es: https://maps.google.com/?q=${latitude},${longitude}`;
         
-        // Notify backend invisibly for Email alert
-        try {
-          await fetch('/api/notify-location', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ publicCode, latitude, longitude })
-          });
-        } catch (e) {
-          console.error("Failed to notify backend", e);
-        }
+        // Notify backend invisibly for Email alert (fire and forget)
+        fetch('/api/notify-location', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ publicCode, latitude, longitude })
+        }).catch(e => console.error("Failed to notify backend", e));
 
         sendWhatsApp(baseText + locationText);
       },
@@ -52,7 +48,7 @@ export function LocationButton({ publicCode, whatsappPhone, petName, isLost }: L
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
+        timeout: 6000,
         maximumAge: 0
       }
     );
@@ -61,7 +57,10 @@ export function LocationButton({ publicCode, whatsappPhone, petName, isLost }: L
   const sendWhatsApp = (text: string) => {
     setIsLoading(false);
     const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(text)}`;
-    window.open(whatsappUrl, "_blank");
+    // Usamos window.location.href en lugar de window.open para evitar bloqueadores de popups
+    // en Safari (iOS) y navegadores con escudos de privacidad como Brave, 
+    // que bloquean ventanas nuevas si se abren desde callbacks asíncronos.
+    window.location.href = whatsappUrl;
   };
 
   return (
