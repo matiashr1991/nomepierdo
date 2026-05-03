@@ -3,8 +3,18 @@ version: "3.8"
 services:
   web:
     image: nomepierdo:latest
-    env_file:
-      - /opt/deploy/nomepierdo/.env-prod
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      DATABASE_URL: ${DATABASE_URL}
+      AUTH_SECRET: ${AUTH_SECRET}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_SECURE: ${SMTP_SECURE}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
     networks:
       - matdevnet
       - db_net
@@ -14,20 +24,23 @@ services:
       placement:
         constraints:
           - node.role == manager
+      restart_policy:
+        condition: on-failure
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=matdevnet"
-        # Routers públicos (reemplazar DOMINIO)
-        - "traefik.http.routers.nomepierdo.rule=Host(`REEMPLAZAR_DOMINIO.com`)"
+        - "traefik.http.routers.nomepierdo.rule=Host(`nomepierdo.mmatdev.com`)"
         - "traefik.http.routers.nomepierdo.entrypoints=websecure"
+        - "traefik.http.routers.nomepierdo.tls=true"
         - "traefik.http.routers.nomepierdo.tls.certresolver=letsencryptresolver"
-        # Servicio
         - "traefik.http.services.nomepierdo.loadbalancer.server.port=3000"
 
   db:
     image: postgres:15-alpine
-    env_file:
-      - /opt/deploy/nomepierdo/.env-prod
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - db_net
     volumes:
@@ -36,6 +49,8 @@ services:
       placement:
         constraints:
           - node.role == manager
+      restart_policy:
+        condition: on-failure
 
 networks:
   matdevnet:
