@@ -10,16 +10,16 @@ export default function Home() {
       <header className="bg-[#F8FAF5]/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <Logo href={null} />
-          <nav className="flex items-center space-x-6">
-            <Link href="/shop" className="text-gray-500 hover:text-gray-800 font-medium transition-colors">
+          <nav className="flex items-center space-x-4 md:space-x-6">
+            <Link href="/shop" className="hidden md:block text-gray-500 hover:text-gray-800 font-medium transition-colors">
               Tienda
             </Link>
-            <Link href="/login" className="text-gray-500 hover:text-gray-800 font-medium transition-colors">
+            <Link href="/login" className="hidden md:block text-gray-500 hover:text-gray-800 font-medium transition-colors">
               Iniciar Sesión
             </Link>
             <Link 
               href="/login" 
-              className="bg-green-600 hover:bg-green-800 text-white px-5 py-2.5 rounded-full font-bold transition-transform hover:scale-105 active:scale-95 shadow-md shadow-green-200"
+              className="bg-green-600 hover:bg-green-800 text-white px-4 md:px-5 py-2 md:py-2.5 rounded-full font-bold transition-transform hover:scale-105 active:scale-95 shadow-md shadow-green-200 text-sm md:text-base"
             >
               Comenzar Gratis
             </Link>

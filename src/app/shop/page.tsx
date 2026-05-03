@@ -10,8 +10,8 @@ export default function ShopPage() {
       <header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <Logo href="/" />
-          <nav className="flex items-center space-x-6">
-            <Link href="/dashboard" className="text-gray-500 hover:text-green-600 font-medium transition-colors">
+          <nav className="flex items-center space-x-4">
+            <Link href="/dashboard" className="text-gray-500 hover:text-green-600 font-medium transition-colors border border-gray-200 px-4 py-2 rounded-full text-sm md:text-base md:border-none md:px-0 md:py-0 md:rounded-none">
               Mi Panel
             </Link>
           </nav>
