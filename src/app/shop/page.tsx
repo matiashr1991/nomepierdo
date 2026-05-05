@@ -10,7 +10,7 @@ export default async function ShopPage() {
   const isLoggedIn = !!session?.user?.id;
   
   let pets: any[] = [];
-  if (isLoggedIn) {
+  if (session?.user?.id) {
     pets = await prisma.pet.findMany({
       where: { userId: session.user.id },
       select: { id: true, name: true, publicCode: true }
