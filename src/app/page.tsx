@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Dog, QrCode, Smartphone, RefreshCw, ShieldCheck, Tag, Heart, Shield, Database, Clock, CheckCircle, UserPlus, FileDown } from "lucide-react";
+import { Dog, QrCode, Smartphone, RefreshCw, ShieldCheck, Tag, Heart, Shield, Database, Clock, CheckCircle, UserPlus, FileDown, MapPin, Globe, Zap } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 export default function Home() {
@@ -79,18 +79,64 @@ export default function Home() {
       </section>
 
       {/* Sobre Nosotros Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 text-orange-600 mb-6 shadow-inner">
-            <Heart className="w-8 h-8" />
+      <section className="py-24 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-orange-100 text-orange-700 font-bold text-sm mb-6">
+                <MapPin className="w-4 h-4 mr-2" />
+                Desde Posadas, Misiones al mundo
+              </div>
+              <h2 className="text-4xl font-extrabold text-gray-900 mb-6 leading-tight">Nacimos por una necesidad real, impulsada por tecnología libre</h2>
+              <p className="text-lg text-gray-600 leading-relaxed mb-6">
+                Lamentablemente, las mascotas se extravían todos los días. Las chapitas tradicionales se rayan, se pierden o exponen tus datos privados innecesariamente. 
+              </p>
+              <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                En <strong>No Me Pierdo</strong>, creemos que la tecnología debe estar al servicio de la comunidad. Desarrollamos este sistema en <strong>Posadas, Misiones</strong>, con una filosofía clara: ofrecer una herramienta de seguridad avanzada de forma <span className="text-green-600 font-bold">100% gratuita y abierta</span> para todos los dueños de mascotas.
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="flex items-start">
+                  <div className="bg-green-100 p-2 rounded-lg mr-4">
+                    <Globe className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900">Independencia Total</h4>
+                    <p className="text-sm text-gray-500">Nuestro servicio es autosustentado y no depende de plataformas externas de terceros para funcionar.</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <div className="bg-blue-100 p-2 rounded-lg mr-4">
+                    <Zap className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900">Soberanía Tecnológica</h4>
+                    <p className="text-sm text-gray-500">Usamos estándares abiertos para garantizar que el servicio esté siempre disponible y accesible.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative">
+              <div className="bg-green-50 rounded-3xl p-8 border border-green-100 relative z-10">
+                <blockquote className="text-xl italic text-gray-700 leading-relaxed mb-6">
+                  "Queremos que cada perro y gato tenga la misma oportunidad de volver a casa. Por eso, el acceso a la identificación digital no debe ser un lujo, sino un derecho para cada mascota."
+                </blockquote>
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold mr-4 shadow-md">
+                    NP
+                  </div>
+                  <div>
+                    <p className="font-bold text-gray-900">Equipo No Me Pierdo</p>
+                    <p className="text-sm text-gray-500">Desarrollo Independiente • Misiones, AR</p>
+                  </div>
+                </div>
+              </div>
+              {/* Decorative elements */}
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-orange-400 rounded-full opacity-10 -z-0"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-green-400 rounded-full opacity-10 -z-0"></div>
+            </div>
           </div>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-6">Nacimos por una necesidad real</h2>
-          <p className="text-xl text-gray-600 leading-relaxed mb-6">
-            Lamentablemente, hoy en día es muy común que las mascotas se extravíen. Las chapitas tradicionales con un número de teléfono grabado suelen rayarse, volverse ilegibles o, peor aún, exponen tu información personal a desconocidos todo el tiempo.
-          </p>
-          <p className="text-xl text-gray-600 leading-relaxed font-medium bg-green-50 p-6 rounded-2xl border border-green-100">
-            Nuestro objetivo es simple: <strong className="text-green-800">Usar la tecnología que ya tenés en el bolsillo para que tu mejor amigo vuelva a casa lo antes posible.</strong>
-          </p>
         </div>
       </section>
       
