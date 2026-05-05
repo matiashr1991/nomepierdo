@@ -3,6 +3,7 @@
 import { updateOrderStatus } from "@/actions/order";
 import { useState } from "react";
 import { CheckCircle, XCircle, Phone, Loader2 } from "lucide-react";
+import { OrderStatus } from "@prisma/client";
 
 interface OrderStatusActionsProps {
   orderId: string;
@@ -12,7 +13,7 @@ interface OrderStatusActionsProps {
 export default function OrderStatusActions({ orderId, currentStatus }: OrderStatusActionsProps) {
   const [loading, setLoading] = useState(false);
 
-  const handleStatusUpdate = async (newStatus: string) => {
+  const handleStatusUpdate = async (newStatus: OrderStatus) => {
     if (newStatus === "CANCELLED" && !confirm("¿Seguro que quieres cancelar esta orden?")) return;
     
     setLoading(true);
