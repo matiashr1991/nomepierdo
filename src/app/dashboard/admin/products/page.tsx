@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, Edit, Trash2, Package, Eye, EyeOff } from "lucide-react";
-import { toggleProductStatus, deleteProduct } from "@/actions/products";
+import { Plus, Edit, Package, Eye, EyeOff } from "lucide-react";
 import ProductFormModal from "./ProductFormModal";
+import ProductActions from "./ProductActions";
 
 export default async function AdminProductsPage() {
   const session = await auth();
@@ -86,26 +86,7 @@ export default async function AdminProductsPage() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <ProductFormModal product={product} isEdit />
-                        
-                        <form action={async () => {
-                          "use server";
-                          await toggleProductStatus(product.id);
-                        }}>
-                          <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors" title={product.active ? "Pausar" : "Activar"}>
-                            {product.active ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                          </button>
-                        </form>
-
-                        <form action={async () => {
-                          "use server";
-                          if(confirm("¿Estás seguro de borrar este producto?")) {
-                            await deleteProduct(product.id);
-                          }
-                        }}>
-                          <button className="p-2 text-gray-400 hover:text-red-600 transition-colors">
-                            <Trash2 className="w-5 h-5" />
-                          </button>
-                        </form>
+                        <ProductActions productId={product.id} isActive={product.active} />
                       </div>
                     </td>
                   </tr>
