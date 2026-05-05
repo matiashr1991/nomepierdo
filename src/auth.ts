@@ -33,7 +33,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         );
 
         if (passwordsMatch) {
-          return { id: user.id, name: user.name, email: user.email };
+          return { id: user.id, name: user.name, email: user.email, role: user.role };
         }
 
         return null;
@@ -46,12 +46,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = (user as any).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (token?.id) {
         session.user.id = token.id as string;
+        (session.user as any).role = token.role;
       }
       return session;
     },
