@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Dog, QrCode, Smartphone, RefreshCw, ShieldCheck, Tag, Heart, Shield, Database, Clock, CheckCircle } from "lucide-react";
+import { Dog, QrCode, Smartphone, RefreshCw, ShieldCheck, Tag, Heart, Shield, Database, Clock, CheckCircle, UserPlus, FileDown } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 export default function Home() {
@@ -91,6 +91,56 @@ export default function Home() {
           <p className="text-xl text-gray-600 leading-relaxed font-medium bg-green-50 p-6 rounded-2xl border border-green-100">
             Nuestro objetivo es simple: <strong className="text-green-800">Usar la tecnología que ya tenés en el bolsillo para que tu mejor amigo vuelva a casa lo antes posible.</strong>
           </p>
+        </div>
+      </section>
+      
+      {/* How it Works Section */}
+      <section className="py-24 bg-[#F8FAF5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">¿Cómo funciona No Me Pierdo?</h2>
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto">Protegé a tu mascota en tres simples pasos. Es rápido, fácil y para siempre.</p>
+          </div>
+          
+          <div className="relative">
+            {/* Connecting line for desktop */}
+            <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-green-200 -translate-y-1/2 z-0"></div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 relative z-10">
+              <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div className="w-20 h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-8 shadow-sm group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
+                  <UserPlus className="w-10 h-10" />
+                </div>
+                <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white font-bold text-sm mb-4">1</div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">Crea su perfil</h3>
+                <p className="text-gray-500 leading-relaxed">
+                  Registrate y cargá los datos de tu mascota. Solo necesitás su nombre y tu número de WhatsApp para empezar.
+                </p>
+              </div>
+
+              <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div className="w-20 h-20 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-8 shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+                  <FileDown className="w-10 h-10" />
+                </div>
+                <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white font-bold text-sm mb-4">2</div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">Generá el QR</h3>
+                <p className="text-gray-500 leading-relaxed">
+                  Descargá el código QR único en alta resolución. Podés elegir formato PNG para imprimir o SVG para grabado láser.
+                </p>
+              </div>
+
+              <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div className="w-20 h-20 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mb-8 shadow-sm group-hover:bg-green-500 group-hover:text-white transition-colors duration-300">
+                  <CheckCircle className="w-10 h-10" />
+                </div>
+                <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white font-bold text-sm mb-4">3</div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">¡Listo para usar!</h3>
+                <p className="text-gray-500 leading-relaxed">
+                  Colocá el código en su chapita o collar. Si alguien lo escanea, te contactará al instante compartiendo su ubicación.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
