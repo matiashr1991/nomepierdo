@@ -19,7 +19,7 @@ export default function Home() {
             </Link>
             <Link 
               href="/login" 
-              className="bg-green-600 hover:bg-green-800 text-white px-4 md:px-5 py-2 md:py-2.5 rounded-full font-bold transition-transform hover:scale-105 active:scale-95 shadow-md shadow-green-200 text-sm md:text-base"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-full font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-green-200/50 text-sm md:text-base border-b-4 border-green-800"
             >
               Comenzar Gratis
             </Link>
@@ -37,19 +37,19 @@ export default function Home() {
                 <span className="flex h-2 w-2 rounded-full bg-green-600 mr-2 animate-pulse"></span>
                 La identificación más segura y rápida
               </div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-800 tracking-tight mb-8 leading-tight">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 tracking-tight mb-8 leading-tight">
                 Identidad Digital QR <br className="hidden md:block"/> para mascotas
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Grabá un QR en la chapita de tu perro o gato. Si alguien lo encuentra, puede <strong className="text-gray-800 font-bold">contactarte por WhatsApp al instante.</strong>
+                Grabá un QR en la chapita de tu mejor amigo. Si alguien lo encuentra, puede <span className="text-green-700 font-bold bg-green-100 px-2 py-1 rounded">contactarte por WhatsApp</span> al instante y enviarte su ubicación exacta.
               </p>
               <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center space-y-4 sm:space-y-0 sm:space-x-6">
                 <Link 
                   href="/login" 
-                  className="w-full sm:w-auto px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-full text-lg shadow-xl shadow-orange-200 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
+                  className="w-full sm:w-auto px-10 py-5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl text-xl shadow-2xl shadow-orange-300/40 transition-all hover:scale-105 active:scale-95 flex items-center justify-center border-b-4 border-orange-700"
                 >
                   <QrCode className="w-6 h-6 mr-3" />
-                  Crear QR para mi mascota
+                  Crear QR Gratis
                 </Link>
               </div>
             </div>
