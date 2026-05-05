@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { OrderStatus } from "@prisma/client";
 
 export async function createOrder(petId: string, productName: string, productPrice: number, productId?: string) {
   const session = await auth();
@@ -27,7 +28,7 @@ export async function createOrder(petId: string, productName: string, productPri
   return order;
 }
 
-export async function updateOrderStatus(orderId: string, newStatus: string) {
+export async function updateOrderStatus(orderId: string, newStatus: OrderStatus) {
   const session = await auth();
   if ((session?.user as any)?.role !== "admin") {
     throw new Error("Unauthorized");
