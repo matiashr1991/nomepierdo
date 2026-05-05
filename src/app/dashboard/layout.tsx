@@ -1,13 +1,16 @@
-import { signOut } from "@/auth";
+import { auth, signOut } from "@/auth";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
-import { LayoutDashboard, LogOut, Dog, ShoppingBag } from "lucide-react";
+import { LayoutDashboard, LogOut, Dog, ShoppingBag, ClipboardList } from "lucide-react";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+  const isAdmin = (session?.user as any)?.role === "admin";
+
   return (
     <div className="flex min-h-screen flex-col md:flex-row bg-[#F8FAF5] relative pb-16 md:pb-0">
       {/* Sidebar (Desktop Only) */}
@@ -39,6 +42,16 @@ export default function DashboardLayout({
               <ShoppingBag className="mr-3 h-5 w-5" />
               Tienda
             </Link>
+
+            {isAdmin && (
+              <Link 
+                href="/dashboard/admin/orders"
+                className="flex items-center px-2 py-2 text-blue-600 hover:bg-blue-50 rounded-md font-bold transition-colors border border-blue-100"
+              >
+                <ClipboardList className="mr-3 h-5 w-5" />
+                Órdenes (Admin)
+              </Link>
+            )}
           </nav>
           
           <div className="mt-auto pt-4 border-t border-gray-200">

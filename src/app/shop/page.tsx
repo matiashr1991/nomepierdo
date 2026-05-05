@@ -1,9 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingBag, ArrowRight, Download } from "lucide-react";
+import { ShoppingBag, Download } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import OrderButton from "./OrderButton";
+export default async function ShopPage() {
+  const session = await auth();
+  const isLoggedIn = !!session?.user?.id;
+  
+  let pets: any[] = [];
+  if (isLoggedIn) {
+    pets = await prisma.pet.findMany({
+      where: { userId: session.user.id },
+      select: { id: true, name: true, publicCode: true }
+    });
+  }
 
-export default function ShopPage() {
   return (
     <div className="min-h-screen bg-[#F8FAF5] font-sans text-gray-800">
       {/* Navbar */}
@@ -68,14 +81,12 @@ export default function ShopPage() {
                   <p className="text-3xl font-extrabold text-green-600">$6.000</p>
                 </div>
               </div>
-              <a 
-                href="https://wa.me/5491100000000?text=Hola!%20Quiero%20encargar%20una%20chapita%203D%20Michi%20con%20QR." 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center bg-gray-900 hover:bg-black text-white px-6 py-3.5 rounded-xl font-bold transition-colors"
-              >
-                Encargar por WhatsApp <ArrowRight className="ml-2 w-5 h-5" />
-              </a>
+              <OrderButton 
+                productName="Chapita 3D Michi" 
+                productPrice={6000} 
+                pets={pets} 
+                isLoggedIn={isLoggedIn} 
+              />
             </div>
           </div>
 
@@ -96,14 +107,12 @@ export default function ShopPage() {
                   <p className="text-3xl font-extrabold text-green-600">$7.500</p>
                 </div>
               </div>
-              <a 
-                href="https://wa.me/5491100000000?text=Hola!%20Quiero%20encargar%20una%20chapita%203D%20con%20dise%C3%B1o%20de%20Huellita%20y%20QR." 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center bg-green-600 hover:bg-green-700 text-white px-6 py-3.5 rounded-xl font-bold transition-colors shadow-md"
-              >
-                Encargar por WhatsApp <ArrowRight className="ml-2 w-5 h-5" />
-              </a>
+              <OrderButton 
+                productName="Chapita 3D Huellita" 
+                productPrice={7500} 
+                pets={pets} 
+                isLoggedIn={isLoggedIn} 
+              />
             </div>
           </div>
 
@@ -121,14 +130,12 @@ export default function ShopPage() {
                   <p className="text-3xl font-extrabold text-green-600">$6.500</p>
                 </div>
               </div>
-              <a 
-                href="https://wa.me/5491100000000?text=Hola!%20Quiero%20encargar%20una%20chapita%203D%20en%20forma%20de%20Huesito%20con%20QR." 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center bg-gray-900 hover:bg-black text-white px-6 py-3.5 rounded-xl font-bold transition-colors"
-              >
-                Encargar por WhatsApp <ArrowRight className="ml-2 w-5 h-5" />
-              </a>
+              <OrderButton 
+                productName="Chapita 3D Huesito" 
+                productPrice={6500} 
+                pets={pets} 
+                isLoggedIn={isLoggedIn} 
+              />
             </div>
           </div>
 
