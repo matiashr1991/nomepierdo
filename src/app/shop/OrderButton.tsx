@@ -6,13 +6,14 @@ import { createOrder } from "@/actions/order";
 import { useRouter } from "next/navigation";
 
 interface OrderButtonProps {
+  productId: string;
   productName: string;
   productPrice: number;
   pets: any[];
   isLoggedIn: boolean;
 }
 
-export default function OrderButton({ productName, productPrice, pets, isLoggedIn }: OrderButtonProps) {
+export default function OrderButton({ productId, productName, productPrice, pets, isLoggedIn }: OrderButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPetId, setSelectedPetId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,7 @@ export default function OrderButton({ productName, productPrice, pets, isLoggedI
     if (!selectedPetId) return;
     setLoading(true);
     try {
-      await createOrder(selectedPetId, productName, productPrice);
+      await createOrder(selectedPetId, productName, productPrice, productId);
       setSuccess(true);
       setTimeout(() => {
         setIsOpen(false);

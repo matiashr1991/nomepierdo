@@ -44,13 +44,25 @@ export default async function DashboardLayout({
             </Link>
 
             {isAdmin && (
-              <Link 
-                href="/dashboard/admin/orders"
-                className="flex items-center px-2 py-2 text-blue-600 hover:bg-blue-50 rounded-md font-bold transition-colors border border-blue-100"
-              >
-                <ClipboardList className="mr-3 h-5 w-5" />
-                Órdenes (Admin)
-              </Link>
+              <>
+                <div className="pt-4 pb-2 px-2">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Administración</p>
+                </div>
+                <Link 
+                  href="/dashboard/admin/orders"
+                  className="flex items-center px-2 py-2 text-blue-600 hover:bg-blue-50 rounded-md font-bold transition-colors border border-blue-100"
+                >
+                  <ClipboardList className="mr-3 h-5 w-5" />
+                  Órdenes
+                </Link>
+                <Link 
+                  href="/dashboard/admin/products"
+                  className="flex items-center px-2 py-2 text-purple-600 hover:bg-purple-50 rounded-md font-bold transition-colors border border-purple-100"
+                >
+                  <ShoppingBag className="mr-3 h-5 w-5" />
+                  Productos
+                </Link>
+              </>
             )}
           </nav>
           

@@ -17,6 +17,11 @@ export default async function ShopPage() {
     });
   }
 
+  const products = await prisma.product.findMany({
+    where: { active: true },
+    orderBy: { createdAt: "asc" }
+  });
+
   return (
     <div className="min-h-screen bg-[#F8FAF5] font-sans text-gray-800">
       {/* Navbar */}
@@ -65,81 +70,56 @@ export default async function ShopPage() {
 
       {/* Products Grid */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          
-          {/* Product 1: 3D Cat */}
-          <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 group hover:shadow-xl transition-all">
-            <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
-              <Image src="/shop/3d_cat.png" alt="Chapita 3D Michi" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-            </div>
-            <div className="p-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">Chapita 3D Michi</h3>
-              <p className="text-gray-500 mb-6 min-h-[48px]">Silueta de gatito impresa en 3D (PLA biodegradable).<br/><br/><strong>Frente:</strong> Nombre de tu mascota.<br/><strong>Reverso:</strong> Código QR integrado en relieve.</p>
-              <div className="flex items-end justify-between mb-8">
-                <div>
-                  <p className="text-sm text-gray-400 font-medium uppercase tracking-wider mb-1">Precio</p>
-                  <p className="text-3xl font-extrabold text-green-600">$6.000</p>
+        {products.length === 0 ? (
+          <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-gray-200">
+            <p className="text-gray-500 text-lg">Próximamente tendremos productos disponibles para vos.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {products.map((product) => (
+              <div key={product.id} className="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 group hover:shadow-xl transition-all">
+                <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
+                  {product.image ? (
+                    <Image 
+                      src={product.image} 
+                      alt={product.name} 
+                      fill 
+                      className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                      <ShoppingBag className="w-12 h-12" />
+                    </div>
+                  )}
+                </div>
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-2">{product.name}</h3>
+                  <p className="text-gray-500 mb-6 min-h-[48px] whitespace-pre-line">
+                    {product.description}
+                  </p>
+                  <div className="flex items-end justify-between mb-8">
+                    <div>
+                      <p className="text-sm text-gray-400 font-medium uppercase tracking-wider mb-1">Precio</p>
+                      <p className="text-3xl font-extrabold text-green-600">
+                        ${product.price.toLocaleString('es-AR')}
+                      </p>
+                    </div>
+                    {product.stock <= 0 && (
+                      <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded">Sin Stock</span>
+                    )}
+                  </div>
+                  <OrderButton 
+                    productId={product.id}
+                    productName={product.name} 
+                    productPrice={product.price} 
+                    pets={pets} 
+                    isLoggedIn={isLoggedIn} 
+                  />
                 </div>
               </div>
-              <OrderButton 
-                productName="Chapita 3D Michi" 
-                productPrice={6000} 
-                pets={pets} 
-                isLoggedIn={isLoggedIn} 
-              />
-            </div>
+            ))}
           </div>
-
-          {/* Product 2: 3D Paw */}
-          <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 group hover:shadow-xl transition-all relative">
-            <div className="absolute top-4 right-4 z-10 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-              Más Vendido
-            </div>
-            <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
-              <Image src="/shop/3d_paw.png" alt="Chapita 3D Huellita" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-            </div>
-            <div className="p-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">Chapita 3D Huellita</h3>
-              <p className="text-gray-500 mb-6 min-h-[48px]">Impresión 3D con diseño de huella.<br/><br/><strong>Frente:</strong> Nombre de tu mascota en color contraste.<br/><strong>Reverso:</strong> Código QR integrado de forma permanente.</p>
-              <div className="flex items-end justify-between mb-8">
-                <div>
-                  <p className="text-sm text-gray-400 font-medium uppercase tracking-wider mb-1">Precio</p>
-                  <p className="text-3xl font-extrabold text-green-600">$7.500</p>
-                </div>
-              </div>
-              <OrderButton 
-                productName="Chapita 3D Huellita" 
-                productPrice={7500} 
-                pets={pets} 
-                isLoggedIn={isLoggedIn} 
-              />
-            </div>
-          </div>
-
-          {/* Product 3: 3D Bone */}
-          <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 group hover:shadow-xl transition-all">
-            <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
-              <Image src="/shop/3d_bone.png" alt="Chapita 3D Huesito" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-            </div>
-            <div className="p-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">Chapita 3D Huesito</h3>
-              <p className="text-gray-500 mb-6 min-h-[48px]">El formato clásico súper resistente.<br/><br/><strong>Frente:</strong> Nombre de tu mascota.<br/><strong>Reverso:</strong> Código QR escaneable impreso en relieve.</p>
-              <div className="flex items-end justify-between mb-8">
-                <div>
-                  <p className="text-sm text-gray-400 font-medium uppercase tracking-wider mb-1">Precio</p>
-                  <p className="text-3xl font-extrabold text-green-600">$6.500</p>
-                </div>
-              </div>
-              <OrderButton 
-                productName="Chapita 3D Huesito" 
-                productPrice={6500} 
-                pets={pets} 
-                isLoggedIn={isLoggedIn} 
-              />
-            </div>
-          </div>
-
-        </div>
+        )}
       </section>
       
       {/* Footer */}
