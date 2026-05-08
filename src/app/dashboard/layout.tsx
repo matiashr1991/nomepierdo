@@ -1,7 +1,7 @@
 import { auth, signOut } from "@/auth";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
-import { LayoutDashboard, LogOut, Dog, ShoppingBag, ClipboardList } from "lucide-react";
+import { LayoutDashboard, LogOut, Dog, ShoppingBag, ClipboardList, Tags, Users } from "lucide-react";
 
 export default async function DashboardLayout({
   children,
@@ -56,11 +56,25 @@ export default async function DashboardLayout({
                   Órdenes
                 </Link>
                 <Link 
+                  href="/dashboard/admin/tags"
+                  className="flex items-center px-2 py-2 text-teal-600 hover:bg-teal-50 rounded-md font-bold transition-colors border border-teal-100"
+                >
+                  <Tags className="mr-3 h-5 w-5" />
+                  Collares QR
+                </Link>
+                <Link 
                   href="/dashboard/admin/products"
                   className="flex items-center px-2 py-2 text-purple-600 hover:bg-purple-50 rounded-md font-bold transition-colors border border-purple-100"
                 >
                   <ShoppingBag className="mr-3 h-5 w-5" />
                   Productos
+                </Link>
+                <Link 
+                  href="/dashboard/admin/users"
+                  className="flex items-center px-2 py-2 text-amber-600 hover:bg-amber-50 rounded-md font-bold transition-colors border border-amber-100"
+                >
+                  <Users className="mr-3 h-5 w-5" />
+                  Usuarios
                 </Link>
               </>
             )}

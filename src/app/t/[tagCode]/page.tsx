@@ -1,0 +1,165 @@
+import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
+import { notFound } from "next/navigation";
+import { Dog, ShieldAlert, Ban, MessageCircleWarning } from "lucide-react";
+import { Logo } from "@/components/Logo";
+import { LocationButton } from "@/components/LocationButton";
+import Link from "next/link";
+import TagRegisterFlow from "./TagRegisterFlow";
+
+export async function generateMetadata() {
+  return {
+    title: "Activar Collar - No Me Pierdo",
+    robots: { index: false, follow: false },
+  };
+}
+
+export default async function TagPublicPage({ params }: { params: Promise<{ tagCode: string }> }) {
+  const { tagCode } = await params;
+
+  const tag = await prisma.qrTag.findUnique({
+    where: { code: tagCode },
+    include: {
+      pet: {
+        include: {
+          user: { select: { name: true } },
+        },
+      },
+    },
+  });
+
+  // Tag doesn't exist
+  if (!tag) {
+    notFound();
+  }
+
+  // BLOCKED — show blocked message
+  if (tag.status === "BLOCKED") {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Ban className="w-8 h-8 text-red-500" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Tag no disponible</h1>
+          <p className="text-gray-500">Este código QR ha sido deshabilitado. Si creés que es un error, contactanos.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // UNREGISTERED — show registration flow
+  if (tag.status === "UNREGISTERED") {
+    const session = await auth();
+    const isLoggedIn = !!session?.user?.id;
+
+    return (
+      <TagRegisterFlow
+        tagCode={tagCode}
+        tagId={tag.id}
+        isLoggedIn={isLoggedIn}
+        userName={session?.user?.name || undefined}
+        userEmail={session?.user?.email || undefined}
+        userId={session?.user?.id || undefined}
+      />
+    );
+  }
+
+  // ACTIVE or LOST — show pet profile (same as /p/ but for tags)
+  if (!tag.pet) {
+    // Edge case: tag is ACTIVE but no pet linked (shouldn't happen)
+    notFound();
+  }
+
+  const pet = tag.pet;
+  const isLost = tag.status === "LOST" || pet.status === "lost";
+
+  // Register scan
+  await prisma.tagScan.create({
+    data: { tagId: tag.id },
+  });
+  await prisma.qrTag.update({
+    where: { id: tag.id },
+    data: { updatedAt: new Date() },
+  });
+
+  const whatsappUrl = `https://wa.me/${pet.whatsappPhone}?text=${encodeURIComponent(
+    isLost
+      ? `Hola, encontré a ${pet.name}. ¡Está conmigo!`
+      : `Hola, estoy viendo la chapita de ${pet.name}.`
+  )}`;
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full">
+        {/* Logo/Brand */}
+        <div className="flex justify-center mb-8">
+          <Logo
+            href={null}
+            textClassName="text-3xl bg-gradient-to-r from-green-700 to-green-500 bg-clip-text text-transparent"
+            iconClassName="h-10 w-10 text-green-600"
+          />
+        </div>
+
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+          {/* Header Image */}
+          <div className="h-64 bg-gray-200 relative">
+            {pet.photoUrl ? (
+              <img src={pet.photoUrl} alt={pet.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center bg-blue-50">
+                <Dog className="w-24 h-24 text-blue-200" />
+              </div>
+            )}
+
+            {/* Status Badge */}
+            {isLost && (
+              <div className="absolute top-4 left-4 right-4 bg-red-600 text-white py-2 px-4 rounded-xl flex items-center justify-center shadow-lg animate-pulse">
+                <ShieldAlert className="w-5 h-5 mr-2" />
+                <span className="font-bold uppercase tracking-wider text-sm">Mascota Perdida</span>
+              </div>
+            )}
+          </div>
+
+          <div className="p-8 text-center">
+            <h1 className="text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">
+              {isLost ? `${pet.name} te necesita` : `Hola, soy ${pet.name}`}
+            </h1>
+
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              {isLost
+                ? "Por favor, contacta a mi dueño urgente si me encontraste."
+                : "Si me encontraste o necesitas contactar a mi dueño, toca el botón abajo."}
+            </p>
+
+            {pet.publicMessage && (
+              <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5 mb-8 text-left">
+                <h3 className="font-bold text-orange-800 mb-1 flex items-center text-sm uppercase tracking-wider">
+                  <MessageCircleWarning className="w-4 h-4 mr-1.5" />
+                  Información Importante
+                </h3>
+                <p className="text-orange-900 leading-relaxed">{pet.publicMessage}</p>
+              </div>
+            )}
+
+            <LocationButton
+              publicCode={pet.publicCode}
+              whatsappPhone={pet.whatsappPhone}
+              petName={pet.name}
+              isLost={isLost}
+            />
+          </div>
+
+          <div className="bg-gray-50 border-t border-gray-100 p-6 text-center">
+            <p className="text-xs text-gray-400 font-medium">
+              Este perfil pertenece a una mascota registrada en{" "}
+              <span className="text-gray-600 font-bold">No Me Pierdo</span>.
+              <br />
+              Tag: <span className="font-mono">{tagCode}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

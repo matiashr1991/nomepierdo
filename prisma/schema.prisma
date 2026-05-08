@@ -9,6 +9,10 @@ datasource db {
   provider = "postgresql"
 }
 
+// =============================================================================
+// AUTH & USER MODELS
+// =============================================================================
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -16,15 +20,62 @@ model User {
   emailVerified DateTime?
   image         String?
   password_hash String?
+  phone         String?   // WhatsApp principal del usuario
+  province      String?   // Provincia (select)
+  city          String?   // Ciudad/Localidad (texto libre)
   pets          Pet[]
   orders        Order[]
   accounts      Account[]
   sessions      Session[]
   role          String    @default("user")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deletedAt     DateTime?
+
+  // Relaciones con el modelo QR-First
+  createdBatches TagBatch[]  @relation("BatchCreator")
+  activatedTags  QrTag[]     @relation("TagActivator")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// =============================================================================
+// SHOP MODELS (existing)
+// =============================================================================
 
 enum OrderStatus {
   PENDING
@@ -61,59 +112,41 @@ model Order {
   updatedAt    DateTime    @updatedAt
 }
 
-model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
+// =============================================================================
+// PET MODEL (enhanced - supports both flows)
+// =============================================================================
 
 model Pet {
-  id             String    @id @default(cuid())
-  userId         String
-  user           User      @relation(fields: [userId], references: [id])
-  publicCode     String    @unique
-  name           String
-  type           String
-  photoUrl       String?
-  whatsappPhone  String
-  publicMessage  String?
-  status         String    @default("active") // active, lost, inactive, deleted
-  scans          Int       @default(0)
-  qrCode         QrCode?
-  orders         Order[]
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  deletedAt      DateTime?
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  publicCode    String    @unique   // Auto-generated code for /p/ route (always present)
+  name          String
+  type          String               // "perro", "gato", "otro"
+  breed         String?              // Raza (opcional)
+  color         String?              // Color principal (opcional)
+  sex           String?              // "male" | "female" (opcional)
+  photoUrl      String?
+  whatsappPhone String               // WhatsApp de contacto para esta mascota
+  publicMessage String?              // Info pública visible al escanear
+  status        String    @default("active") // active, lost, inactive, deleted
+  scans         Int       @default(0)
+
+  // Relación con QR legacy (Modelo A: pet-first)
+  qrCode QrCode?
+
+  // Relación con QR Tag / Collar (Modelo B: QR-first)
+  qrTag QrTag?
+
+  orders    Order[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
+
+// =============================================================================
+// QR LEGACY MODEL (Modelo A: Pet-First - existing, untouched)
+// =============================================================================
 
 model QrCode {
   id        String   @id @default(cuid())
@@ -124,4 +157,77 @@ model QrCode {
   qrSvgUrl  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// =============================================================================
+// QR-FIRST MODELS (Modelo B: Collar Tags - NEW)
+// =============================================================================
+
+/// Estado del tag QR físico (collar)
+enum TagStatus {
+  UNREGISTERED // Generado por admin, sin usar — listo para vender/distribuir
+  ACTIVE       // Vinculado a una mascota, funcionando normal
+  LOST         // Mascota marcada como perdida — modo alerta
+  BLOCKED      // Bloqueado por admin — no muestra info ni permite registro
+}
+
+/// Lote de tags generados por el admin
+model TagBatch {
+  id           String   @id @default(cuid())
+  name         String                          // Nombre descriptivo: "Lote Mayo 2026"
+  prefix       String   @default("NMP")        // Prefijo para códigos: NMP-XXXXXX
+  quantity     Int                              // Cantidad de tags generados
+  createdById  String                           // Admin que generó el lote
+  createdBy    User     @relation("BatchCreator", fields: [createdById], references: [id])
+  tags         QrTag[]                          // Tags del lote
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+/// Tag QR individual — representa un collar físico con un QR impreso
+model QrTag {
+  id             String    @id @default(cuid())
+  code           String    @unique              // Código único impreso en el collar: NMP-A3K9X2
+  status         TagStatus @default(UNREGISTERED)
+
+  // Relación con el lote
+  batchId        String
+  batch          TagBatch  @relation(fields: [batchId], references: [id])
+
+  // Relación con la mascota (null = tag libre, sin registrar)
+  petId          String?   @unique
+  pet            Pet?      @relation(fields: [petId], references: [id])
+
+  // Quién activó este tag (el dueño que lo registró)
+  activatedById  String?
+  activatedBy    User?     @relation("TagActivator", fields: [activatedById], references: [id])
+  activatedAt    DateTime?
+
+  // Admin notes
+  notes          String?
+
+  // Historial de escaneos
+  scans          TagScan[]
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([status])
+  @@index([batchId])
+}
+
+/// Registro de cada escaneo de un tag QR
+model TagScan {
+  id         String   @id @default(cuid())
+  tagId      String
+  tag        QrTag    @relation(fields: [tagId], references: [id])
+  ipAddress  String?                          // IP del escáner
+  userAgent  String?                          // Browser/dispositivo
+  latitude   Float?                           // Geolocalización (si el usuario compartió)
+  longitude  Float?
+  scannedAt  DateTime @default(now())
+
+  @@index([tagId])
+  @@index([scannedAt])
 }
