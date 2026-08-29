@@ -1,0 +1,54 @@
+schema: spec-driven
+
+context: |
+  Project: webQrMascotas (petqr) - QR pet tag registration platform.
+  Stack: Next.js 16.2.4 (App Router) + React 19.2.4 + TypeScript 5.
+  Data: Prisma 7.8 (prisma-client-js) + PostgreSQL via @prisma/adapter-pg / pg.
+  Auth: next-auth v5.0.0-beta.31 + @auth/prisma-adapter, bcrypt for passwords.
+  UI: Tailwind CSS 4 + shadcn (components.json) + @base-ui/react, lucide-react icons.
+  Server logic: Server Actions in src/actions/ (order, pet, products, tagRegister, tags, users).
+  Domain: QR-first collar model - TagBatch/QrTag activation, Pet, Order, User with role field.
+  Deploy: Docker (Dockerfile, docker-compose.yml) + Docker Swarm (stack.yml), DEPLOY.md.
+
+strict_tdd: false
+
+testing:
+  runner: none
+  layers:
+    unit: false
+    integration: false
+    e2e: false
+  coverage: false
+  quality:
+    linter: "eslint (eslint.config.mjs, next lint)"
+    type_checker: "tsc (tsconfig.json, no dedicated typecheck script)"
+    formatter: none
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes (DB schema, auth, payment/order flow)
+    - Note Prisma schema/migration impact explicitly when models change
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Document Server Action boundaries (src/actions/) vs UI components
+    - Note auth/session implications for next-auth v5 (beta) changes
+    - Include sequence diagrams for QR activation / order flows when relevant
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+    - Call out any required `npx prisma migrate` / `prisma generate` step
+  apply:
+    guidelines:
+      - Follow existing code patterns (Server Actions in src/actions/, shadcn UI in src/components/ui/)
+      - Keep Prisma schema changes and generated client in sync
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: "npm run build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
+    - Warn when a change touches prisma/schema.prisma without a migration note
