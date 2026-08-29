@@ -46,14 +46,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role;
+        // Boundary cast: `user` here is next-auth's own User/AdapterUser type
+        // returned by `authorize()`, which does not declare our app-level
+        // `role` field. This is the one documented boundary cast (see
+        // design.md) — role reads everywhere else are fully typed.
+        token.role = (user as { role: "user" | "admin" }).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (token?.id) {
         session.user.id = token.id as string;
-        (session.user as any).role = token.role;
+        session.user.role = token.role as "user" | "admin";
       }
       return session;
     },

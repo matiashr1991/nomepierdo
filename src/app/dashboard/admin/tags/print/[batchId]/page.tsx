@@ -9,7 +9,7 @@ import BatchPrintClient from "./BatchPrintClient";
 export default async function BatchPrintPage({ params }: { params: Promise<{ batchId: string }> }) {
   const { batchId } = await params;
   const session = await auth();
-  if ((session?.user as any)?.role !== "admin") {
+  if (session?.user?.role !== "admin") {
     redirect("/dashboard");
   }
 

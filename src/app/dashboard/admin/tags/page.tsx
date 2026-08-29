@@ -13,7 +13,7 @@ export default async function AdminTagsPage({
   searchParams: Promise<{ status?: string; batch?: string; q?: string; page?: string }>;
 }) {
   const session = await auth();
-  if ((session?.user as any)?.role !== "admin") {
+  if (session?.user?.role !== "admin") {
     redirect("/dashboard");
   }
 

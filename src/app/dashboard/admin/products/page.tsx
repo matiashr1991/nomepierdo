@@ -9,7 +9,7 @@ import ProductActions from "./ProductActions";
 
 export default async function AdminProductsPage() {
   const session = await auth();
-  if ((session?.user as any)?.role !== "admin") {
+  if (session?.user?.role !== "admin") {
     redirect("/dashboard");
   }
 

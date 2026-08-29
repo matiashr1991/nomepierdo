@@ -9,7 +9,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  const isAdmin = (session?.user as any)?.role === "admin";
+  const isAdmin = session?.user?.role === "admin";
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row bg-[#F8FAF5] relative pb-16 md:pb-0">

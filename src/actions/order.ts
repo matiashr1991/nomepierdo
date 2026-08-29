@@ -30,7 +30,7 @@ export async function createOrder(petId: string, productName: string, productPri
 
 export async function updateOrderStatus(orderId: string, newStatus: OrderStatus) {
   const session = await auth();
-  if ((session?.user as any)?.role !== "admin") {
+  if (session?.user?.role !== "admin") {
     throw new Error("Unauthorized");
   }
 

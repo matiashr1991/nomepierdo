@@ -9,7 +9,7 @@ import OrderStatusActions from "./OrderStatusActions";
 export default async function AdminOrdersPage() {
   const session = await auth();
   
-  if (!session?.user?.id || (session.user as any).role !== "admin") {
+  if (!session?.user?.id || session.user.role !== "admin") {
     redirect("/dashboard");
   }
 

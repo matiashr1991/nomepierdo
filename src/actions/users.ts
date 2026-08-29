@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 
 async function requireAdmin() {
   const session = await auth();
-  if (!session?.user?.id || (session.user as any).role !== "admin") {
+  if (!session?.user?.id || session.user.role !== "admin") {
     throw new Error("Unauthorized: Admin access required");
   }
   return { ...session, user: { ...session.user, id: session.user.id as string } };
