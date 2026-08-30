@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   web:
-    image: nomepierdo:latest
+    image: ${IMAGE:-nomepierdo:latest}
     environment:
       NODE_ENV: ${NODE_ENV}
       DATABASE_URL: ${DATABASE_URL}

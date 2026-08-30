@@ -85,6 +85,6 @@ jobs:
             . /opt/deploy/nomepierdo/.env-prod
             set +a
 
-            docker --config "$DOCKER_CONFIG" pull "ghcr.io/matiashr1991/nomepierdo:${IMAGE_SHA}"
+            export IMAGE="ghcr.io/matiashr1991/nomepierdo:${IMAGE_SHA}"
+            docker --config "$DOCKER_CONFIG" pull "$IMAGE"
             docker --config "$DOCKER_CONFIG" stack deploy -c stack.yml nomepierdo --with-registry-auth --detach=false
-            docker service update --force --image "ghcr.io/matiashr1991/nomepierdo:${IMAGE_SHA}" nomepierdo_web
