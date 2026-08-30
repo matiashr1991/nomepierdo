@@ -34,6 +34,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
+# Next.js standalone tracing misses these transitive deps of @prisma/adapter-mariadb's
+# nested mariadb driver (they're required lazily, not statically, so @vercel/nft can't see them).
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/mariadb ./node_modules/mariadb
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/denque ./node_modules/denque
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/iconv-lite ./node_modules/iconv-lite
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/lru-cache ./node_modules/lru-cache
 
 RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public/uploads
 
