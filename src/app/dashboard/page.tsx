@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Dog, Plus, QrCode } from "lucide-react";
+import { Pet } from "@prisma/client";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -12,7 +13,7 @@ export default async function DashboardPage() {
 
   // To run this safely when DB is offline, we should try-catch or assume DB is up.
   // For the MVP, we assume DB is up. 
-  let pets: any[] = [];
+  let pets: Pet[] = [];
   try {
     pets = await prisma.pet.findMany({
       where: { userId: session.user.id }

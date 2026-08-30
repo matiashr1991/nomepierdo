@@ -5,8 +5,9 @@ import { updatePet } from "@/actions/pet";
 import Link from "next/link";
 import { Save, Upload } from "lucide-react";
 import Image from "next/image";
+import { Pet } from "@prisma/client";
 
-export default function EditPetForm({ pet }: { pet: any }) {
+export default function EditPetForm({ pet }: { pet: Pet }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(pet.photoUrl);
 

@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { Download, Copy, ExternalLink, Check, ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import { Pet } from "@prisma/client";
 
-export default function QrClient({ pet, publicUrl }: { pet: any, publicUrl: string }) {
+export default function QrClient({ pet, publicUrl }: { pet: Pet, publicUrl: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [copied, setCopied] = useState(false);
 

@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { Prisma, TagStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 // =============================================================================
@@ -115,10 +116,12 @@ export async function getTags(filters?: {
   const pageSize = filters?.pageSize || 20;
   const skip = (page - 1) * pageSize;
 
-  const where: any = {};
+  const where: Prisma.QrTagWhereInput = {};
 
   if (filters?.status && filters.status !== "ALL") {
-    where.status = filters.status;
+    // "ALL" is a UI-only sentinel meaning "no filter", excluded above,
+    // so anything remaining is a real TagStatus value.
+    where.status = filters.status as TagStatus;
   }
 
   if (filters?.batchId && filters.batchId !== "ALL") {

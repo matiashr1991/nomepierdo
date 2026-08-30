@@ -4,9 +4,10 @@ import { useState } from "react";
 import { Plus, Edit, X, Loader2, Upload, Trash2 } from "lucide-react";
 import { createProduct, updateProduct } from "@/actions/products";
 import Image from "next/image";
+import { Product } from "@prisma/client";
 
 interface ProductFormModalProps {
-  product?: any;
+  product?: Product;
   isEdit?: boolean;
 }
 
@@ -22,7 +23,9 @@ export default function ProductFormModal({ product, isEdit = false }: ProductFor
     
     try {
       if (isEdit) {
-        await updateProduct(product.id, formData);
+        // isEdit is only ever passed together with product (see AdminProductsPage) —
+        // the props interface doesn't structurally encode that pairing.
+        await updateProduct(product!.id, formData);
       } else {
         await createProduct(formData);
       }
@@ -144,7 +147,7 @@ export default function ProductFormModal({ product, isEdit = false }: ProductFor
                   <label className="block text-sm font-bold text-gray-700 mb-1">Descripción</label>
                   <textarea 
                     name="description" 
-                    defaultValue={product?.description} 
+                    defaultValue={product?.description ?? undefined}
                     rows={4}
                     className="w-full p-3 rounded-xl border border-gray-200 focus:border-green-500 focus:outline-none bg-gray-50"
                     placeholder="Contanos más sobre el producto..."

@@ -17,8 +17,8 @@ export default function CreateAdminModal() {
     try {
       await createAdminUser(formData);
       setIsOpen(false);
-    } catch (error: any) {
-      alert(error.message || "Error al crear el administrador");
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Error al crear el administrador");
     } finally {
       setLoading(false);
     }

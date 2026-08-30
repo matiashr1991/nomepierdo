@@ -19,8 +19,8 @@ export default function OrderStatusActions({ orderId, currentStatus }: OrderStat
     setLoading(true);
     try {
       await updateOrderStatus(orderId, newStatus);
-    } catch (error: any) {
-      alert(error.message || "Error al actualizar estado");
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Error al actualizar estado");
     } finally {
       setLoading(false);
     }

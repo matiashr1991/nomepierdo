@@ -120,7 +120,7 @@ export default function Home() {
             <div className="relative">
               <div className="bg-green-50 rounded-3xl p-8 border border-green-100 relative z-10">
                 <blockquote className="text-xl italic text-gray-700 leading-relaxed mb-6">
-                  "Queremos que cada perro y gato tenga la misma oportunidad de volver a casa. Por eso, el acceso a la identificación digital no debe ser un lujo, sino un derecho para cada mascota."
+                  &ldquo;Queremos que cada perro y gato tenga la misma oportunidad de volver a casa. Por eso, el acceso a la identificación digital no debe ser un lujo, sino un derecho para cada mascota.&rdquo;
                 </blockquote>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold mr-4 shadow-md">

@@ -13,6 +13,15 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    // prisma.config.js is loaded directly by the Prisma CLI as CommonJS
+    // (no "type": "module" in package.json) — require() here is correct,
+    // not a lint violation to fix.
+    files: ["prisma.config.js"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

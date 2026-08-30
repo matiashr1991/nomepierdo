@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { Prisma, TagStatus } from "@prisma/client";
 import { Tags, Package, CheckCircle, AlertTriangle, Ban, Search, QrCode } from "lucide-react";
 import Link from "next/link";
 import CreateBatchModal from "./CreateBatchModal";
@@ -23,9 +24,9 @@ export default async function AdminTagsPage({
   const skip = (page - 1) * pageSize;
 
   // Build filters
-  const where: any = {};
+  const where: Prisma.QrTagWhereInput = {};
   if (params.status && params.status !== "ALL") {
-    where.status = params.status;
+    where.status = params.status as TagStatus;
   }
   if (params.batch && params.batch !== "ALL") {
     where.batchId = params.batch;

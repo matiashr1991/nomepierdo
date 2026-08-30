@@ -4,12 +4,13 @@ import { useState } from "react";
 import { ArrowRight, Check, Loader2, AlertCircle } from "lucide-react";
 import { createOrder } from "@/actions/order";
 import { useRouter } from "next/navigation";
+import { Pet } from "@prisma/client";
 
 interface OrderButtonProps {
   productId: string;
   productName: string;
   productPrice: number;
-  pets: any[];
+  pets: Pick<Pet, "id" | "name" | "publicCode">[];
   isLoggedIn: boolean;
 }
 

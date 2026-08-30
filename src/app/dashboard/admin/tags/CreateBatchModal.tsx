@@ -16,8 +16,8 @@ export default function CreateBatchModal() {
     try {
       await createBatch(formData);
       setIsOpen(false);
-    } catch (error: any) {
-      alert(error.message || "Error al crear el lote");
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Error al crear el lote");
     } finally {
       setLoading(false);
     }

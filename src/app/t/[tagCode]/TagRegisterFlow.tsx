@@ -89,8 +89,8 @@ export default function TagRegisterFlow({
         phone: whatsapp.trim() || undefined,
       });
       setSuccess({ publicCode: result.publicCode });
-    } catch (err: any) {
-      setError(err.message || "Error al registrar. Intente nuevamente.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al registrar. Intente nuevamente.");
     } finally {
       setLoading(false);
     }

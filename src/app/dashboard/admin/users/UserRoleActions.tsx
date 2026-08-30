@@ -19,8 +19,8 @@ export default function UserRoleActions({ userId, isAdmin, isCurrentUser, userNa
     setLoading(true);
     try {
       await promoteToAdmin(userId);
-    } catch (error: any) {
-      alert(error.message || "Error al promover usuario");
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Error al promover usuario");
     } finally {
       setLoading(false);
     }
@@ -31,8 +31,8 @@ export default function UserRoleActions({ userId, isAdmin, isCurrentUser, userNa
     setLoading(true);
     try {
       await demoteFromAdmin(userId);
-    } catch (error: any) {
-      alert(error.message || "Error al cambiar rol");
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Error al cambiar rol");
     } finally {
       setLoading(false);
     }

@@ -3,13 +3,14 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Plus, QrCode, Edit, Eye, Search } from "lucide-react";
 import Image from "next/image";
+import { Pet } from "@prisma/client";
 
 export default async function PetsPage() {
   const session = await auth();
   
   if (!session?.user?.id) return null;
 
-  let pets: any[] = [];
+  let pets: Pet[] = [];
   try {
     pets = await prisma.pet.findMany({
       where: { userId: session.user.id },

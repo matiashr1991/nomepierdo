@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 interface RegisterPetFromTagInput {
@@ -84,7 +85,7 @@ export async function registerPetFromTag(input: RegisterPetFromTagInput) {
     });
 
     // 3. Update user profile if location data provided
-    const userUpdates: any = {};
+    const userUpdates: Prisma.UserUpdateInput = {};
     if (input.province) userUpdates.province = input.province;
     if (input.city) userUpdates.city = input.city;
     if (input.phone) userUpdates.phone = input.phone;

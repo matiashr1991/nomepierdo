@@ -4,12 +4,13 @@ import { ShoppingBag, Download } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { Pet } from "@prisma/client";
 import OrderButton from "./OrderButton";
 export default async function ShopPage() {
   const session = await auth();
   const isLoggedIn = !!session?.user?.id;
   
-  let pets: any[] = [];
+  let pets: Pick<Pet, "id" | "name" | "publicCode">[] = [];
   if (session?.user?.id) {
     pets = await prisma.pet.findMany({
       where: { userId: session.user.id },

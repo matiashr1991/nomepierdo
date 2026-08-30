@@ -1,10 +1,29 @@
 "use client";
 
 import { QrCode, Dog, User, Eye, RotateCcw, Ban, Unlock, ScanLine } from "lucide-react";
+import { Prisma } from "@prisma/client";
 import TagActions from "./TagActions";
 
+type TagWithRelations = Prisma.QrTagGetPayload<{
+  include: {
+    batch: { select: { name: true; prefix: true } };
+    pet: {
+      select: {
+        id: true;
+        name: true;
+        type: true;
+        photoUrl: true;
+        status: true;
+        whatsappPhone: true;
+        user: { select: { name: true; email: true } };
+      };
+    };
+    _count: { select: { scans: true } };
+  };
+}>;
+
 interface TagTableProps {
-  tags: any[];
+  tags: TagWithRelations[];
 }
 
 const statusConfig: Record<string, { label: string; color: string; bg: string; border: string }> = {

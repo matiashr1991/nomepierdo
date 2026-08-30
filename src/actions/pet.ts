@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { writeFile } from "fs/promises";
+import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 
@@ -41,7 +41,6 @@ export async function createPet(formData: FormData) {
     const filename = `pet-${uniqueSuffix}${extension}`;
     
     const filepath = path.join(process.cwd(), "public/uploads", filename);
-    const { mkdir } = require("fs/promises");
     await mkdir(path.dirname(filepath), { recursive: true });
     await writeFile(filepath, buffer);
     
@@ -102,7 +101,6 @@ export async function updatePet(id: string, formData: FormData) {
     const filename = `pet-${uniqueSuffix}${extension}`;
     
     const filepath = path.join(process.cwd(), "public/uploads", filename);
-    const { mkdir } = require("fs/promises");
     await mkdir(path.dirname(filepath), { recursive: true });
     await writeFile(filepath, buffer);
     

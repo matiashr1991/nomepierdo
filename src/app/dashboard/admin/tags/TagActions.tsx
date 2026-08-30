@@ -23,8 +23,8 @@ export default function TagActions({ tagId, tagCode, status, hasPet }: TagAction
     setMenuOpen(false);
     try {
       await action();
-    } catch (error: any) {
-      alert(error.message || "Error al ejecutar la acción");
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Error al ejecutar la acción");
     } finally {
       setLoading(false);
     }
@@ -35,8 +35,8 @@ export default function TagActions({ tagId, tagCode, status, hasPet }: TagAction
     try {
       await updateTagNotes(tagId, notes);
       setNotesOpen(false);
-    } catch (error: any) {
-      alert(error.message || "Error al guardar notas");
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Error al guardar notas");
     } finally {
       setLoading(false);
     }
