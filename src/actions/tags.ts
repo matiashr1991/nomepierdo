@@ -130,9 +130,9 @@ export async function getTags(filters?: {
 
   if (filters?.search) {
     where.OR = [
-      { code: { contains: filters.search, mode: "insensitive" } },
-      { pet: { name: { contains: filters.search, mode: "insensitive" } } },
-      { notes: { contains: filters.search, mode: "insensitive" } },
+      { code: { contains: filters.search } },
+      { pet: { name: { contains: filters.search } } },
+      { notes: { contains: filters.search } },
     ];
   }
 

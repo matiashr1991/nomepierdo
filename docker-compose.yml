@@ -14,23 +14,22 @@ services:
       - "3000:3000"
     environment:
       # Apunta al contenedor de la base de datos local
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/petqrdb?schema=public
+      - DATABASE_URL=mysql://root:root@db:3306/petqrdb
     # Ejecuta el servidor de desarrollo
     command: sh -c "npm install && npm run dev"
     depends_on:
       - db
 
   db:
-    image: postgres:15
+    image: mysql:8.0
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: petqrdb
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: petqrdb
     ports:
-      - "5433:5432"
+      - "3307:3306"
     volumes:
-      - petqr_postgres_data:/var/lib/postgresql/data
+      - petqr_mysql_data:/var/lib/mysql
 
 volumes:
-  petqr_postgres_data:
+  petqr_mysql_data:

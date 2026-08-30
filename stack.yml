@@ -19,7 +19,6 @@ services:
       SMTP_PASS: ${SMTP_PASS}
     networks:
       - matdevnet
-      - db_net
     volumes:
       - nomepierdo_uploads:/app/public/uploads
     deploy:
@@ -39,30 +38,9 @@ services:
         - "traefik.http.routers.nomepierdo.tls.certresolver=letsencryptresolver"
         - "traefik.http.services.nomepierdo.loadbalancer.server.port=3000"
 
-  db:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    networks:
-      - db_net
-    volumes:
-      - nomepierdo_pgdata:/var/lib/postgresql/data
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
-      restart_policy:
-        condition: on-failure
-
 networks:
   matdevnet:
     external: true
-  db_net:
-    driver: overlay
-    attachable: true
 
 volumes:
-  nomepierdo_pgdata:
   nomepierdo_uploads:

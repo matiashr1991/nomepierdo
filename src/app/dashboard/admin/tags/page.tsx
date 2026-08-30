@@ -33,9 +33,9 @@ export default async function AdminTagsPage({
   }
   if (params.q) {
     where.OR = [
-      { code: { contains: params.q, mode: "insensitive" } },
-      { notes: { contains: params.q, mode: "insensitive" } },
-      { pet: { name: { contains: params.q, mode: "insensitive" } } },
+      { code: { contains: params.q } },
+      { notes: { contains: params.q } },
+      { pet: { name: { contains: params.q } } },
     ];
   }
 

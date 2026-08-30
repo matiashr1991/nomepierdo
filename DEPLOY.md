@@ -1,6 +1,6 @@
 # Checklist de Deploy Exacto (No Me Pierdo)
 
-Este es el proceso exacto, paso a paso, para desplegar en tu VPS con Docker Swarm, sin CI/CD y haciendo build local con Docker.
+Este es el proceso exacto, paso a paso, para desplegar en tu VPS con Docker Swarm. La base de datos es el MySQL del host (no un contenedor) — ver `openspec/changes/migrate-postgres-to-mysql/design.md` para el porqué de la IP `172.18.0.1`.
 
 ## 1) Crear la carpeta y el archivo `.env-prod`
 
@@ -51,14 +51,13 @@ docker stack deploy -c stack.yml nomepierdo
 
 ## 5) Inicializar la base de datos con Prisma (`db push`)
 
-Como no usamos migraciones formales por ahora, empujamos el schema directamente:
+Como no usamos migraciones formales por ahora, empujamos el schema directamente. La base es el MySQL del host (`172.18.0.1:3306`, usuario `nomepierdo`, scoped solo a la base `nomepierdo`) — el contenedor efímero usa `--network host` para llegar ahí sin depender de una red overlay dedicada:
 
 ```bash
-docker run --rm \
+docker run --rm --network host \
   --env-file /opt/deploy/nomepierdo/.env-prod \
   -v /opt/stacks/nomepierdo:/app \
   -w /app \
-  --network nomepierdo_db_net \
   node:20-alpine \
   sh -lc "apk add --no-cache libc6-compat openssl && npm ci && npx prisma db push"
 ```
@@ -74,7 +73,6 @@ docker service update --force nomepierdo_web
 ```bash
 docker service ls | grep nomepierdo
 docker service ps nomepierdo_web --no-trunc
-docker service ps nomepierdo_db --no-trunc
 docker service logs --since 5m nomepierdo_web
 
 curl -kI https://127.0.0.1 -H 'Host: nomepierdo.mmatdev.com'
